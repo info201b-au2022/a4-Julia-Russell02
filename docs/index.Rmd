@@ -1,7 +1,7 @@
 ---
-title: "Your A4 Report Title (TODO: Revise title)"
-author: "Your Name"
-date: '2022-11-01'
+title: "Inequalities and Incarceration"
+author: "Julia Russell"
+date: '2022-11-22'
 output: html_document
 ---
 
@@ -11,35 +11,79 @@ source("../source/analysis.R")
 ```
 
 ## Abstract 
-[TODO: Include a short abstract (about 50 words)]
-
-# Test (TODO: Remove before submission!!)
-```{r echo=FALSE}
-q1_string <- test_query1()
-num <- 5
-```
-As you know, this is a markdown report. The [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) is **useful!**
-
-* Here's a test of a dynamic variable. Say **"`r q1_string`!!!** 
-* Here's another test. A vector
-of numbers: `r test_query2(num)`.
-
-Recall that _{r echo=TRUE}_ can be used to display the code, 
-which is very useful when developing and debugging a report. Here's an example: 
-
-```{r echo=TRUE}
-num <- 5
-sum <- sum(test_query2(num))
-print(sum)
-```
+This report investigates the inequalities that surround incarceration in the United States. I am doing so by using data from the Vera institute. This report will touch on the disproportionality of people of color being incarcerated and how jail populations have changed over 1970-2018 in both the states and the US overall.
 
 ## Introduction 
-[TODO]
+In this report, I am investigating inequalities that surround incarceration in the United States. I am using data that comes from the Vera Institute. The Vera Institute is an organization that is working to fight injustices in the criminal justice system. The data I am using only gives us a small piece of the puzzle in regards to the issues that surround incarceration. Incarceration not only affects people who are incarcerated but also the people that surround them for the rest of their lives. People who are incarcerated have a stain against their name that affects their ability to rehabilitate themselves into society. That doesn’t even take into account an extra existing bias against people of color, especially if they were previously incarcerated. This dataset can aid in identifying any inequality patterns that occur with those who are incarcerated and where. By revealing these patterns, we know where we need to investigate further in what is causing these disparities. Some questions that are answered in this report are: Are POC (people of color) disproportionately incarcerated compared to white people?, How has jail populations in the US changed over time?, How has jail populations in a certain state changed when compared to other states?, Which type of county jails more people?, Where in the US are Black people being incarcerated disproportionately?.
+
+```{r echo=FALSE}
+total_white <- get_white_pop_county()
+white_pop_rural <- round(total_white$percent[2] * 100, digits = 2)
+white_pop_small <- round(total_white$percent[3] * 100, digits = 2)
+white_pop_suburban <- round(total_white$percent[4] * 100, digits = 2)
+white_pop_urban <- round(total_white$percent[5] * 100, digits = 2)
+
+total_poc <- get_poc_pop_county()
+poc_pop_rural <- round(total_poc$percent[2] * 100, digits = 2)
+poc_pop_small <- round(total_poc$percent[3] * 100, digits = 2)
+poc_pop_suburban <- round(total_poc$percent[4] * 100, digits = 2)
+poc_pop_urban <- round(total_poc$percent[5] * 100, digits = 2)
+
+total_white_incar <- get_white_incar_county()
+white_incar_rural <- round(total_white_incar$percent[2] * 100, digits = 2)
+white_incar_small <- round(total_white_incar$percent[3] * 100, digits = 2)
+white_incar_suburban <- round(total_white_incar$percent[4] * 100, digits = 2)
+white_incar_urban <- round(total_white_incar$percent[5] * 100, digits = 2)
+
+total_poc_incar <- get_poc_incar_county()
+poc_incar_rural <- round(total_poc_incar$percent[2] * 100, digits = 2)
+poc_incar_small <- round(total_poc_incar$percent[3] * 100, digits = 2)
+poc_incar_suburban <- round(total_poc_incar$percent[4] * 100, digits = 2)
+poc_incar_urban <- round(total_poc_incar$percent[5] * 100, digits = 2)
+```
 
 ## Data Summary 
-[TODO]
+I chose to investigate the differences between the percent of the white population incarcerated and the percent of the POC population incarcerated across all types of counties across the US. This is important because looking at these differences helps to highlight racial inequality across types of counties
 
-[TODO ... other sections ... See Canvas for details]
+In rural counties, `r white_pop_rural` percent of the population is white and `r white_incar_rural` percent of them have been incarcerated. `r poc_pop_rural` percent of the population is  POC  and `r poc_incar_rural` percent of them have been incarcerated. From this information, we can conclude that POC has been incarcerated more than white people based on the concentration of both populations in rural counties. 
 
-_All the very best with your work!_
+In small/mid size counties, `r white_pop_small` percent of the population is white and `r white_incar_small` percent of them have been incarcerated. `r poc_pop_small` percent of the population is POC and `r poc_incar_small` percent of them have been incarcerated. From this information, we can conclude that POC has been incarcerated more than white people based on the concentration of both populations in small/mid size counties.
 
+In suburban counties, `r white_pop_suburban` percent of the population is white and `r white_incar_suburban` percent of them have been incarcerated. `r poc_pop_suburban` percent of the population is POC and `r poc_incar_suburban` percent of them have been incarcerated. From this information, we can conclude that POC has been incarcerated more than white people based on the concentration of both populations in suburban counties. 
+
+In urban counties, `r white_pop_urban` percent of the population is white and `r white_incar_urban` percent of them have been incarcerated. `r poc_pop_urban` percent of the population is POC and `r poc_incar_urban` percent of them have been incarcerated. From this information, we can conclude that POC has been incarcerated more than white people based on the concentration of both populations in urban counties.
+
+In *all* counties POC has been disproportionately incarcerated more than white people have. 
+
+## Growth of the U.S. Prison Population
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot_jail_pop_for_us()
+```
+
+This chart shows that the jail population in the U.S. remains relatively steady from 1970-1980. The jail population then increases at a rate of about 20,000 people every year from 1980-2005. The jail population then starts to decrease over the course of 3 years, starting at about 2008 and then increases for 3 years. The population then jumps down in 2015 and remains steady again.
+
+## Growth of Prison Population by State 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot_jail_pop_by_states(c("WA", "TX", "CA", "GA"))
+```
+
+For this chart, I chose to investigate Washington, California, Texas, and Georgia because I wanted a good mix of large, mid-size, conservative, and liberal states. As shown in the chart, both California and Texas have had an increase of 20,000 jail inmates over the course of 5 years. For California, it happened twice between 1980-1990. For Texas, it happened between 1990-1995. Georgia has had a steady increase in jail population between 1970-2018. However, the jail population in Washington has remained relatively stable (with only a slight increase).
+
+## Growth of Jailed Population by County Type
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot_jail_pop_by_county_type()
+```
+
+For this section, I wanted to answer the question: “Which type of county jails more people?” I created a chart that uses the percent of people in each county type that has been jailed from 1970-2018. The chart shows that from about 2000 -2018 counties that are considered rural jailed more of its population than the other types of counties. However from 1970-2000, counties that are considered urban jailed more of its population than the other types of counties. Counties that are considered suburban have consistently jailed the least amount of their population.
+
+## Where Black People are Incarcerated More
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot_black_pop()
+plot_black_incar_pop()
+```
+
+For this next section, I wanted to answer the question: “Where in the US are Black people being incarcerated disproportionately?” This is an important question to ask because it helps reveal where there is inequality in Black people being incarcerated and where we might need to investigate these inequalities further. I created two maps, one showing the percent of each state’s population that is Black and one showing the percent of the incarcerated population in each state that is Black. As shown in each map, states that have a lower population percentage of Black people (light blue) have a slightly higher incarcerated population of Black people (darker blue). In particular, Illinois and New Jersey. Thus we can conclude that Black people are being incarcerated disproportionately in the US, especially in Illinois and New Jersey.
